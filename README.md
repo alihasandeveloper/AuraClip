@@ -33,7 +33,19 @@ AuraClip is a native macOS menu bar clipboard manager crafted with Swift, SwiftU
 
 ---
 
-## 🚀 Building & Running
+## 💿 Installation
+
+1. Download **`AuraClip.dmg`** from the [Latest Release](https://github.com/alihasandeveloper/AuraClip/releases).
+2. Double-click the DMG and drag **AuraClip** into your **Applications** folder.
+3. If macOS shows a security prompt (*"AuraClip can't be opened"* or *"damaged"* due to Gatekeeper quarantine on internet downloads), simply run this one command in Terminal:
+   ```bash
+   xattr -cr /Applications/AuraClip.app
+   ```
+   *(Or Right-click `AuraClip.app` in Applications ➔ Click **Open** ➔ **Open Anyway**)*.
+
+---
+
+## 🚀 Building & Running from Source
 
 1. Clone the repository:
    ```bash
@@ -51,3 +63,4 @@ AuraClip is a native macOS menu bar clipboard manager crafted with Swift, SwiftU
 ## 📄 License
 
 MIT License. Designed and developed with ❤️ for macOS.
+
