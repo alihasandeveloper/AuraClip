@@ -1,5 +1,8 @@
-# Xcode
+# Builds & Distribution
 build/
+build_output/
+dist/
+*.dmg
 DerivedData/
 *.pbxuser
 !default.pbxuser
