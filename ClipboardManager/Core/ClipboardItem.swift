@@ -178,6 +178,25 @@ public struct ClipboardItem: Identifiable, Codable, Equatable {
         return formatter.localizedString(for: createdAt, relativeTo: Date())
     }
 
+    public var openableURL: URL? {
+        if contentType == .url, let text = plainText?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
+            if let url = URL(string: text), url.scheme != nil {
+                return url
+            }
+            if let url = URL(string: "https://" + text) {
+                return url
+            }
+        } else if let text = plainText?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
+            if (text.hasPrefix("http://") || text.hasPrefix("https://")) && !text.contains(" ") && !text.contains("\n") {
+                return URL(string: text)
+            }
+            if text.hasPrefix("www.") && !text.contains(" ") && !text.contains("\n") {
+                return URL(string: "https://" + text)
+            }
+        }
+        return nil
+    }
+
     public func matches(query: String) -> Bool {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !trimmed.isEmpty else { return true }

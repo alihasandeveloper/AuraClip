@@ -9,6 +9,7 @@ import AppKit
 struct HistoryPopupView: View {
     @ObservedObject var store = ClipboardStore.shared
     let onPasteItem: (ClipboardItem) -> Void
+    let onOpenURL: (URL) -> Void
     let onOpenSettings: () -> Void
     let onClose: () -> Void
 
@@ -192,6 +193,9 @@ struct HistoryPopupView: View {
                                     onSelect: {
                                         onPasteItem(item)
                                     },
+                                    onOpenURL: { url in
+                                        onOpenURL(url)
+                                    },
                                     onTogglePin: {
                                         store.togglePin(id: item.id)
                                     },
@@ -254,6 +258,9 @@ struct HistoryPopupView: View {
             // Keyboard hints
             HStack(spacing: 5) {
                 KeyboardBadge(title: "↵", label: "Paste")
+                if let sel = store.selectedItem, sel.openableURL != nil {
+                    KeyboardBadge(title: "⌘O", label: "Open Link")
+                }
                 KeyboardBadge(title: "↑↓", label: "Navigate")
                 KeyboardBadge(title: "⌘1-9", label: "Quick Paste")
                 KeyboardBadge(title: "Esc", label: "Close")

@@ -117,7 +117,7 @@ public final class ClipboardMonitor {
                     }
                 }
 
-                if (trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://")) && !trimmed.contains(" ") {
+                if (trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") || (trimmed.hasPrefix("www.") && trimmed.contains("."))) && !trimmed.contains(" ") && !trimmed.contains("\n") {
                     contentType = .url
                 } else if (trimmed.hasPrefix("#") && (trimmed.count == 7 || trimmed.count == 9)) ||
                             trimmed.hasPrefix("rgb(") || trimmed.hasPrefix("rgba(") {

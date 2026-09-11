@@ -46,6 +46,12 @@ public final class ClipboardStore: ObservableObject {
         }
     }
 
+    public var selectedItem: ClipboardItem? {
+        let items = filteredItems
+        guard selectedIndex >= 0 && selectedIndex < items.count else { return nil }
+        return items[selectedIndex]
+    }
+
     // MARK: - Tab Index Helpers
 
     public var currentTabIndex: Int {

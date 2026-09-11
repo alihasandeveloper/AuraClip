@@ -44,6 +44,9 @@ public final class HistoryPopupPanel: NSPanel {
             onPasteItem: { [weak self] item in
                 self?.pasteAndClose(item: item)
             },
+            onOpenURL: { [weak self] url in
+                self?.openURLAndClose(url: url)
+            },
             onOpenSettings: { [weak self] in
                 self?.closePanel()
                 MenuBarController.shared.openSettingsWindow()
@@ -123,6 +126,11 @@ public final class HistoryPopupPanel: NSPanel {
         PasteSimulator.shared.paste(item: item, targetApp: target)
     }
 
+    public func openURLAndClose(url: URL) {
+        closePanel()
+        NSWorkspace.shared.open(url)
+    }
+
     // MARK: - Key Event Handling
 
     private func startLocalKeyMonitoring() {
@@ -190,6 +198,15 @@ public final class HistoryPopupPanel: NSPanel {
                     return true
                 }
             }
+            // Cmd + O -> Open URL in default browser
+            if event.charactersIgnoringModifiers?.lowercased() == "o" {
+                let items = ClipboardStore.shared.filteredItems
+                let sel = ClipboardStore.shared.selectedIndex
+                if sel >= 0 && sel < items.count, let url = items[sel].openableURL {
+                    openURLAndClose(url: url)
+                    return true
+                }
+            }
         }
 
         // Tab key (keyCode 48) - Switch tabs
@@ -226,11 +243,16 @@ public final class HistoryPopupPanel: NSPanel {
             return true
         }
 
-        // Enter / Return (keyCode 36) - Paste selected item
+        // Enter / Return (keyCode 36) - Paste or Open Link
         if event.keyCode == 36 {
             let items = ClipboardStore.shared.filteredItems
             let sel = ClipboardStore.shared.selectedIndex
             if !items.isEmpty && sel >= 0 && sel < items.count {
+                // Cmd + Return opens URL in default browser
+                if flags.contains(.command), let url = items[sel].openableURL {
+                    openURLAndClose(url: url)
+                    return true
+                }
                 pasteAndClose(item: items[sel])
                 return true
             }
